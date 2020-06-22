@@ -1,0 +1,25 @@
+root@gns3-ubuntu-1:~# cat multinetmiko
+
+#!/usr/bin/env python
+
+from netmiko import ConnectHandler
+def netmiko_connection(ip):
+        return {
+        'device_type': 'cisco_ios',
+        'ip': ip,
+        'username': 'cisco',
+        'password': 'cisco',
+        'secret':'cisco',
+        }
+
+list1 = ['192.168.122.211' , '192.168.122.210']
+
+for ip in list1:
+        iosv = netmiko_connection(ip)
+        print(iosv)
+        print('Connecting to ' + ip )
+        net_connect = ConnectHandler(**iosv)
+        output = net_connect.send_command('show ip interface brief')
+        print(output)
+
+root@gns3-ubuntu-1:~#
