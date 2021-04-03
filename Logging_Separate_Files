@@ -1,4 +1,3 @@
-        'device_type': 'cisco_ios',
 from netmiko import Netmiko
 from netmiko import ConnectHandler
 def netmiko_connection(ip):
