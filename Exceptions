@@ -1,0 +1,39 @@
+from netmiko import Netmiko
+from netmiko import ConnectHandler
+def netmiko_connection(ip):
+        return {
+        'device_type': 'cisco_ios',
+        'ip': ip,
+        'username': 'cisco',
+        'password': 'cisco',
+        'secret':'cisco',
+        'global_delay_factor': 4
+        }
+
+cfg_file = "cnfg_file"
+list1 = "device_list"
+list1 = open ("device_list" , 'r')
+command = "router bgp 65000"
+str = "router bgp"
+with open ('device_list') as list1:
+        for ip in list1:
+                iosv = netmiko_connection(ip)
+                print(iosv)
+                print('Connecting to ' + ip )
+                try:
+                        net_connect = ConnectHandler(**iosv)
+                        net_connect.enable()
+                #cfg_file = "cnfg_file"
+                except netmiko.ssh_exception.NetMikoTimeoutException:
+                        print("Connection failed to " , ip)
+                        continue
+                except NameError:
+                        return "Connection failed"
+                        continue
+                output = net_connect.send_config_from_file(cfg_file)
+                print(output)
+
+                if str in output:
+                        print ("bgp is present")
+                else:
+                        net_connect.send_config_set(command)
